@@ -117,7 +117,7 @@ android 40-43 lesson:
                     });
                 }
             }
-8.自定义actionID:在res-layout-activity_main.xml中定义android:imeActionLabel属性：
+8.自定义actionID:在res->layout->activity_main.xml中定义android:imeActionLabel属性：
             <EditText
                     android:id="@+id/launch_codes"
                     android:layout_width="fill_parent"
