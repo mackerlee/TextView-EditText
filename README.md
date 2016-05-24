@@ -1,6 +1,6 @@
 # TextView-EditText
 
-android 40-41 lesson:
+android 40-43 lesson:
 1.TextView:继承view组件,向用户显示文本，基本的配置为不允许编辑.如果要编辑用EditText,如果要允许用户复制TextView的值，设置XML属             性android:textSelectable为true或者在代码中用setTextIsSelectable(true)设置，标记TextView允许用户做出手势选择从而触             发内置的复制粘贴控制.
             
 2.TextView实例：res->layout->activity_main.xml:
@@ -70,10 +70,61 @@ android 40-41 lesson:
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@id/TextView02"
-          //--设置输入类型,这样对应的键盘不一样，可以限制其他类型的输入，该属性可以并列设置几种方式
+          //--设置输入类型,这样对应的键盘不一样，可以限制其他类型的输入，该属性可以并列设置几种方式,用|分割都在“”号中
           android:inputType="textPersonName"
+          //--设置输入的最大长度
+          android:maxLength="20"
           android:hint="请输入..."
+          //--设置提示文字的颜色
+          android:textColorHint="#238745"
           //--设置键盘出来后最后右下角的按钮是什么，此处设置为发送
           android:imeOptions="actionSend"/>
   
   </RelativeLayout>
+
+7.EditText触发的事件，用于获取输入的值:app->java-包名->MainActivity.java:
+            package com.example.mackerlee.android_34;
+            
+            import android.support.v7.app.AppCompatActivity;
+            import android.os.Bundle;
+            import android.view.KeyEvent;
+            import android.view.inputmethod.EditorInfo;
+            import android.widget.EditText;
+            import android.widget.TextView;
+            import android.widget.Toast;
+            
+            public class MainActivity extends AppCompatActivity {
+            
+                //--声明输入文本框
+                private EditText editText01;
+            
+                @Override
+                protected void onCreate(Bundle savedInstanceState) {
+                    super.onCreate(savedInstanceState);
+                    setContentView(R.layout.activity_main);
+                    editText01 = (EditText)findViewById(R.id.EditText01);
+                    //--为编辑框设置一个回车键监听事件处理，观察者模式
+                    editText01.setOnEditorActionListener(new TextView.OnEditorActionListener(){
+                        //--其中参数v就是当前editText01对象,actionId是activity_main.xml中设置的android:imeOptions值
+                        public boolean onEditorAction(TextView v, int actionId, KeyEvent event){
+                            //--判断actionId按钮的类型，从而进行事件处理
+                            if(actionId== EditorInfo.IME_ACTION_SEND) {
+                                String value = v.getText().toString();
+                                Toast.makeText(MainActivity.this, value, Toast.LENGTH_LONG).show();
+                            }
+                            return false;
+                        }
+                    });
+                }
+            }
+8.自定义actionID:在res->layout->activity_main.xml中定义android:imeActionLabel属性：
+            <EditText
+                    android:id="@+id/launch_codes"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/enter_launch_codes"
+                    android:layout_below="@id/EditText01"
+                    android:inputType="number"
+                    //--自定义 action button label，相当于自定义的android:imeOptions值
+                    android:imeActionLabel="@string/launch" />
+                    
